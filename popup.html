@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: sans-serif; width: 200px; padding: 12px; }
+    input, button { width: 100%; margin-top: 8px; box-sizing: border-box; }
+    .status-box {
+      margin-top: 10px;
+      padding: 6px;
+      background: #f0f0f0;
+      border-radius: 4px;
+      font-size: 12px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <label for="loops">Target Loop Count:</label>
+  <input type="number" id="loops" min="1" value="3">
+  <button id="startBtn">Set Loops</button>
+
+  <div class="status-box" id="status">Status: Idle</div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
