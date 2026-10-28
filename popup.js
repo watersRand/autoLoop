@@ -5,7 +5,7 @@ function updateUI() {
     const loopsInput = document.getElementById('loops');
 
     if (data.active) {
-      statusDiv.innerText = `Looping: ${data.currentLoop} / ${data.targetLoops} done`;
+      statusDiv.innerText = `Looping: ${data.currentLoop || 0} / ${data.targetLoops} done`;
     } else {
       statusDiv.innerText = "Status: Idle";
     }
@@ -34,23 +34,16 @@ document.getElementById('startBtn').addEventListener('click', async () => {
     return;
   }
 
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-
-  if (!tab || !tab.id) {
-    statusDiv.innerText = "Error: No active tab found";
-    return;
-  }
-
-  // Send loop setup message to active tab content script
-  chrome.tabs.sendMessage(tab.id, { action: "SET_LOOP", count: count }, (response) => {
+  
+chrome.runtime.sendMessage({ action: "SET_LOOP", count: count }, (response) => {
     if (chrome.runtime.lastError) {
-      statusDiv.innerText = "Error: Reload page or active tab not supported";
+      statusDiv.innerText = "Error communicating with extension";
       console.error("Communication error:", chrome.runtime.lastError.message);
     } else {
       updateUI();
+      statusDiv.innerText = `Looping set to ${count}`;
     }
   });
 });
-
 // 3. Initial UI populate on popup load
 document.addEventListener('DOMContentLoaded', updateUI);

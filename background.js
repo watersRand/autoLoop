@@ -9,6 +9,25 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     chrome.storage.local.get(["targetLoops", "currentLoop", "active"], (data) => {
       sendResponse(data);
     });
-    return true; // Keep channel open for async response
+    return true; 
+  }
+ 
+  if ( request.action === "SET_LOOP") {
+	  const count = parseInt(request.count,10) || 0;
+	  const newState = {
+		  targetLoops: count,
+		  currentLoop: 0,
+		  active: count > 0
+	  };
+
+	  chrome.storage.local.set(newState,() => {
+		  chrome.tabs.query({}, (tabs) => {
+			  tabs.forEach((tab) => {
+				  chrome.tabs.sendMessage(tab.id, { action: "STATE_UPDATED", state:newState }).catch(() => {});
+			  });
+		  });
+		  sendResponse({status: "success", state: newState });
+	  });
+	  return true;
   }
 });

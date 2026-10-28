@@ -6,7 +6,8 @@
   "permissions": [
     "activeTab",
     "storage",
-    "tabs"
+    "tabs",
+    "<all_urls>"
   ],
   "background": {
     "scripts": ["background.js"],
@@ -28,12 +29,13 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "js": ["content.js"],
+      "run_at":"document_end"
     }
   ],
   "browser_specific_settings": {
     "gecko": {
-      "id": "medialooper@example.com",
+      "id": "tomsongrandy@gmail.com",
       "strict_min_version": "140.0",
       "data_collection_permissions": {
         "required": ["none"]
